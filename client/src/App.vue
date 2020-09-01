@@ -3,20 +3,31 @@
         <div id="seachat">
             <header>
                 <h1>海洋聊天室</h1>
-                <h2>{{me}}</h2>
+                <h2>{{me.name}}</h2>
             </header>
             <content>
                 <div id="message-container" ref="messages">
-                    <div class="message" v-for="message in messages" :key="message.id">
+                    <div
+                        class="message"
+                        :class="{mine:message.sender.id==me.id}"
+                        v-for="message in messages"
+                        :key="message.id"
+                    >
                         <p>
-                            <span class="meta sender">{{message.sender}}</span>
+                            <span
+                                class="meta sender"
+                            >{{message.sender.id == me.id ?'我': message.sender.name}}</span>
                             <span class="meta time">{{message.time}}</span>
                         </p>
                         <p class="content">{{message.content}}</p>
                     </div>
                 </div>
                 <div id="users">
-                    <p class="user" v-for="id in users.filter(id=>id!=me)" :key="id">{{id}}</p>
+                    <p
+                        class="user"
+                        v-for="user in users.filter(user=>user.id!=me.id)"
+                        :key="user.id"
+                    >{{user.name}}</p>
                 </div>
             </content>
             <footer>
@@ -31,20 +42,32 @@
 import socketio from "socket.io-client";
 const io = socketio("localhost:3000");
 
+function getLastElements(array, n) {
+    return array.slice(Math.max(array.length - n, 0));
+}
+
 export default {
     name: "app",
     data() {
         return {
-            me: "",
+            me: {},
             users: [],
             message: "",
             messages: [],
         };
     },
+    mounted() {
+        const name = localStorage.getItem("name", "") || prompt("你的名字?");
+        io.emit("rename", name);
+        localStorage.setItem("name", name);
+    },
     created() {
-        io.on("id", (id) => (this.me = id));
+        io.on("user", (user) => (this.me = user));
         io.on("users", (users) => (this.users = users));
-        io.on("message", (message) => this.messages.push(message));
+        io.on("message", (message) => {
+            this.messages.push(message);
+            this.messages = getLastElements(this.messages, 100);
+        });
     },
     updated() {
         this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
@@ -126,6 +149,10 @@ body {
                         color: #777;
                     }
                 }
+            }
+            .message.mine {
+                background-color: #333;
+                color: #ccc;
             }
         }
         #users {

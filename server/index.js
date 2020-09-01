@@ -23,20 +23,28 @@ class Message {
 
 let users = []
 io.on('connection', client => {
-    const id = client.id
-    console.log(`client ${id} joined`)
-    users.push(id)
-    client.emit('id', id)
+    const user = { id: client.id, name: '匿名' }
+    client.emit('user', user)
+    users.push(user)
     io.emit('users', users)
     client.emit('message', new Message('系统', '欢迎来到海洋聊天室'))
-    client.broadcast.emit('message', new Message('系统', `${id} 加入了聊天室`))
 
-    client.on('message', (message) => io.emit('message', new Message(sender = id, content = message)))
+    client.on('message', (message) => io.emit('message', new Message(sender = user, content = message)))
+
+    client.on('rename', (name) => {
+        users = users.filter(u => u.id != user.id)
+        user.name = name
+        client.emit('user', user)
+        users.push(user)
+        io.emit('users', users)
+        if (name) client.broadcast.emit('message', new Message('系统', `${user.name} 加入了聊天室`))
+    })
 
     client.on('disconnect', () => {
-        console.log(`client ${id} left`)
-        io.emit('message', new Message('系统', `${id} 离开了聊天室`))
-        users = users.filter(_ => _ != id)
+        if (user.name !== '匿名') {
+            io.emit('message', new Message('系统', `${user.name} 离开了聊天室`))
+        }
+        users = users.filter(u => u.id != user.id)
         io.emit('users', users)
     })
 })
