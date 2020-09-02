@@ -5,3 +5,5 @@
 ``` shell
 npm start
 ```
+
+![](SeaChat.png)
