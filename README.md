@@ -9,4 +9,4 @@ npm start
 
 ## Interface
 
-![SeaChat.png](SeaChat.png)
+![screenshot](screenshot.png)
