@@ -1,4 +1,4 @@
-# Sea Chat
+# SeaChat
 
 ## Run
 
