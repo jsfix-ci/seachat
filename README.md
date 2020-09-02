@@ -1,5 +1,7 @@
 # SeaChat
 
+chat app example using socket.io
+
 ## Run
 
 ``` shell
