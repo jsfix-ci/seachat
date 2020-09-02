@@ -35,7 +35,7 @@ io.on("connection", client => {
             user.name = name
             client.emit("user", user)
             io.emit("users", users)
-            client.broadcast.emit("message", new Message(`${name} joined us`))
+            client.broadcast.emit("message", new Message(`<strong>${name}</strong> joined us`))
         }
     })
 
@@ -47,7 +47,7 @@ io.on("connection", client => {
         users = users.filter(u => u.id !== client.id)
         io.emit("users", users)
         if (user.name) {
-            client.broadcast.emit("message", new Message(`${user.name} has left`))
+            client.broadcast.emit("message", new Message(`<strong>${user.name}</strong> has left`))
         }
     })
 })
