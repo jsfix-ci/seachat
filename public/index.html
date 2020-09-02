@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeaChat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="seachat">
+        <header>
+            <h1>SeaChat</h1>
+        </header>
+        <div class="body">
+            <div class="users"></div>
+            <div class="messages"></div>
+        </div>
+        <footer>
+            <input type="text" id="message" placeholder="Type your message here ..." onkeyup="onKeyUp(event)">
+            <button onclick="sendMessage()">Send</button>
+        </footer>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/seachat.js"></script>
+</body>
+
+</html>
