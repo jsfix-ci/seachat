@@ -6,4 +6,4 @@
 npm start
 ```
 
-![](SeaChat.png)
+![SeaChat.png](SeaChat.png)
