@@ -7,47 +7,54 @@ const server = require("http").createServer(app)
 const io = require("socket.io")(server)
 const host = process.env.PORT || "0.0.0.0"
 const port = process.env.PORT || 8000
-server.listen(port, host, () => console.info(`chat server is running at ${host}:${port}`))
-
-app.use(express.static(path.join(__dirname, "public")))
-
-let users = []
 
 class Message {
-    constructor(content, sender = { id: 0, name: 'system' }) {
+    constructor(content, sender = { id: null, name: 'system' }) {
         this.id = uuid.v4()
         this.sender = sender
         this.content = content
-        this.time = moment().format('HH:mm a')
+        this.time = moment().format('HH:mm')
     }
 }
 
+let users = []
+function broadcastUserlist() { io.emit("users", users) }
+
+// NOTE:
+// io.emit() => send to every client
+// client.emit() => send to the client
+// client.broadcast.emit() => send to every but except this client
+
+// handle websocket comunication
 io.on("connection", client => {
-    const user = { id: client.id, name: "" }
-    users.push(user)
-    client.emit("user", user)
-    io.emit("users", users)
-    client.emit("message", new Message('Welcome to SeaChat ...'))
+    // handle new connection
+    client.emit("id", client.id)  // tell client his id
+    client.emit("message", new Message('Welcome to SeaChat ...'))  // and say hello
+    const currentUser = { id: client.id, name: "" }  // create user object for this connection
+    users.push(currentUser) && broadcastUserlist()  // ... and store it to the user list and broadcast the updated user list
 
-    client.on("name", (name) => {
+    // handle user's name
+    client.on("name", name => {
         name = name.trim()
-        if (name && users.filter(u => u.name == name).length == 0) {
-            user.name = name
-            client.emit("user", user)
-            io.emit("users", users)
-            client.broadcast.emit("message", new Message(`<strong>${name}</strong> joined us`))
+        // name can be either empty or unique
+        if (name === '' || users.filter(user => user.name == name).length === 0) {
+            name && client.broadcast.emit("message", new Message(`<strong>${name}</strong> has joined us`))
+            currentUser.name = name
+            broadcastUserlist()
         }
     })
 
-    client.on("message", (message) => {
-        io.emit("message", new Message(message, user))
-    })
+    // handle user's message
+    client.on("message", message => io.emit("message", new Message(message, currentUser)))
 
+    // handle user's disconnection
     client.on("disconnect", () => {
-        users = users.filter(u => u.id !== client.id)
-        io.emit("users", users)
-        if (user.name) {
-            client.broadcast.emit("message", new Message(`<strong>${user.name}</strong> has left`))
-        }
+        users = users.filter(user => user.id !== client.id)
+        broadcastUserlist()
+        currentUser.name && client.broadcast.emit("message", new Message(`<strong>${currentUser.name}</strong> has left`))
     })
 })
+
+// serve static public files and start the server
+app.use(express.static(path.join(__dirname, "public")))
+server.listen(port, host, () => console.info(`chat server is running at ${host}:${port}`))

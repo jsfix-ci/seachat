@@ -5,65 +5,19 @@
 }
 
 body {
-  height: 100vh;
+  height: 100vh !important;
   padding: 1rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  font-size: 24px;
+  font-family: monospace;
 }
 
 #seachat {
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height: 100%;
-  max-width: 1000px;
-  font-size: 24px;
-  font-family: monospace;
   border: 1px solid black;
-}
-#seachat div.body {
   display: flex;
-  flex: 1 0 auto;
-  height: 0px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-}
-#seachat div.body > div {
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-#seachat div.body .users {
-  flex: 1 1;
-  border-right: 1px solid black;
-}
-#seachat div.body .users .user {
-  margin: 8px;
-}
-#seachat div.body .users .me::after {
-  content: " (me)";
-}
-#seachat div.body .users .anonymous {
-  font-size: 12pt;
-  color: #ccc;
-}
-#seachat div.body .messages {
-  flex: 3 3;
-}
-#seachat div.body .messages .message {
-  margin: 8px;
-  padding: 0.5rem;
-  border-radius: 4px;
-  border: 1px dashed #ccc;
-}
-#seachat div.body .messages .message .meta {
-  font-size: 12pt;
-  color: #ccc;
-  margin-bottom: 0.5rem;
-}
-#seachat div.body .messages .message .meta .name,
-#seachat div.body .messages .message .meta .time {
-  color: #777;
+  flex-direction: column;
 }
 #seachat header,
 #seachat footer {
@@ -86,10 +40,56 @@ body {
 #seachat footer button {
   padding: 0 2rem;
   cursor: pointer;
-  border-left-style: none;
+  border-left: none;
 }
 #seachat header button:hover,
 #seachat footer button:hover {
   color: white;
   background-color: black;
+}
+#seachat #body {
+  display: flex !important;
+  flex: 1 0 auto !important;
+  height: 0px !important;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+#seachat #body > div {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#seachat #body #users {
+  flex: 1 1;
+  border-right: 1px solid black;
+}
+#seachat #body #users .user {
+  margin: 8px;
+}
+#seachat #body #users .me::after {
+  content: " (me)";
+  color: #ccc;
+}
+#seachat #body #users .anonymous {
+  color: #ccc;
+  font-size: 16px;
+}
+#seachat #body #messages {
+  flex: 3 3;
+}
+#seachat #body #messages .message {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px dashed #ccc;
+}
+#seachat #body #messages .message .meta {
+  font-size: 16px;
+  color: #ccc;
+  margin-bottom: 0.5rem;
+}
+#seachat #body #messages .message .meta .name {
+  color: #337;
+}
+#seachat #body #messages .message .meta .time {
+  color: #777;
 }
