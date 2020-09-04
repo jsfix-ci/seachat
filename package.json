@@ -1,10 +1,11 @@
 {
   "name": "seachat",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "chat app example using socket.io",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
