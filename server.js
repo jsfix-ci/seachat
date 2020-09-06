@@ -9,11 +9,11 @@ const host = process.env.PORT || "0.0.0.0"
 const port = process.env.PORT || 8000
 
 class Message {
-    constructor(content, sender = { id: null, name: 'system' }) {
+    constructor(content, sender = { id: null, name: "system" }) {
         this.id = uuid.v4()
         this.sender = sender
         this.content = content
-        this.time = moment().format('HH:mm')
+        this.time = moment().format("HH:mm")
     }
 }
 
@@ -29,25 +29,25 @@ function broadcastUserlist() { io.emit("users", users) }
 io.on("connection", client => {
     // handle new connection
     client.emit("id", client.id)  // tell client his id
-    client.emit("message", new Message('Welcome to SeaChat ...'))  // and say hello
+    client.emit("message", new Message("Welcome to SeaChat ..."))  // and say hello
     const currentUser = { id: client.id, name: "" }  // create user object for this connection
     users.push(currentUser) && broadcastUserlist()  // ... and store it to the user list and broadcast the updated user list
 
-    // handle user's name
+    // handle user name
     client.on("name", name => {
         name = name.trim()
         // name can be either empty or unique
-        if (name === '' || users.filter(user => user.name == name).length === 0) {
+        if (name === "" || users.filter(user => user.name == name).length === 0) {
             name && client.broadcast.emit("message", new Message(`<strong>${name}</strong> has joined us`))
             currentUser.name = name
             broadcastUserlist()
         }
     })
 
-    // handle user's message
+    // handle user message
     client.on("message", message => io.emit("message", new Message(message, currentUser)))
 
-    // handle user's disconnection
+    // handle user disconnection
     client.on("disconnect", () => {
         users = users.filter(user => user.id !== client.id)
         broadcastUserlist()
