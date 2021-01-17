@@ -3,35 +3,31 @@ const messageInput = document.getElementById('message');
 const usersContainer = document.getElementById('users');
 const messagesContainer = document.getElementById('messages');
 
-// send name to server
-client.emit('name', prompt('Please enter your name'));
+// send your name to server
+client.on('connect', () => client.emit('name', prompt('Please enter your name.')));
+client.on('rename', name => client.emit('name', name ?
+    prompt(`The name "${name}" is taken. Please enter another name.`) :
+    prompt('Please MUST enter your name.')
+));
 
 // handle user list from server
 client.on('users', users => {
-    const namedUsers = users.filter(user => user.name);
-    const countOfAnonymous = users.length - namedUsers.length;
     usersContainer.innerHTML = '';
-    namedUsers.forEach(user => {
+    for (const [id, name] of Object.entries(users)) {
         const p = document.createElement('p');
-        p.className = user.id === client.id ? 'user me' : 'user';
-        p.innerText = user.name;
-        usersContainer.append(p);
-    });
-    if (countOfAnonymous > 0) {
-        const p = document.createElement('p');
-        p.className = 'user anonymous';
-        p.innerHTML = `... and ${countOfAnonymous} more anonymous`;
+        p.className = id === client.id ? 'user me' : 'user';
+        p.innerText = name;
         usersContainer.append(p);
     }
 });
 
-// handle message from server
-client.on('message', message => {
+// show message incoming from server
+client.on('message', (id, name, time, message) => {
     const div = document.createElement('div');
-    message.sender.id === client.id && (message.sender.name = 'me');
+    id === client.id && (name = 'me');
     div.className = 'message';
-    div.innerHTML = `<p class='meta'><span class='name'>${message.sender.name || 'anonymous'}</span> @ <span class='time'>${message.time}</span></p>
-    <p class='content'>${message.content}</p>`;
+    div.innerHTML = `<p class='meta'><span class='name'>${name}</span> @ <span class='time'>${time}</span></p>
+    <p class='content'>${message}</p>`;
     messagesContainer.append(div);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;  // auto scroll down to bottom
 });

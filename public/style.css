@@ -69,10 +69,6 @@ body {
   content: " (me)";
   color: #ccc;
 }
-#seachat #body #users .anonymous {
-  color: #ccc;
-  font-size: 16px;
-}
 #seachat #body #messages {
   flex: 3 3;
 }

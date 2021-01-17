@@ -1,57 +1,40 @@
-const path = require('path');
-const moment = require('moment');
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-const host = process.env.HOST || 'localhost';
-const port = process.env.PORT || 8000;
+const now = () => (new Date()).toLocaleString();
+const users = {};
+app.use(express.static('public'));
+server.listen(8000, 'localhost');
 
-class Message {
-    constructor(content, sender = { id: null, name: 'system' }) {
-        this.sender = sender;
-        this.content = content;
-        this.time = moment().format('HH:mm');
-    }
-}
-
-let users = [];
-function broadcastUserlist() { io.emit('users', users); }
-
-// NOTE:
-// io.emit() => send to every client
-// client.emit() => send to the client
-// client.broadcast.emit() => send to every but except this client
-
-// handle websocket comunication
+// handle websocket connection and comunication events
 io.on('connection', client => {
-    // handle new connection
-    client.emit('message', new Message('Welcome to SeaChat ...'));  // and say hello
-    const currentUser = { id: client.id, name: '' };  // create user object for this connection
-    users.push(currentUser) && broadcastUserlist();  // ... and store it to the user list and broadcast the updated user list
+    console.log(`[${client.id}]: connected`);
 
-    // handle user name
+    // handle user's name
     client.on('name', name => {
-        name = name ? name.trim() : '';
-        // name can be either empty or unique
-        if (name === '' || users.filter(user => user.name == name).length === 0) {
-            name && client.broadcast.emit('message', new Message(`<strong>${name}</strong> has joined us`));
-            currentUser.name = name;
-            broadcastUserlist();
-        }
+        // name should be not empty and unique
+        if (!name || name == 'system' || Object.values(users).includes(name)) return client.emit('rename', name);
+        // say hello to user, set user's name and broadcast the updated users list
+        client.emit('message', null, 'system', now(), 'Welcome to SeaChat ...');
+        users[client.id] = name;
+        io.emit('users', users);
+        console.log(`[${client.id}]: set name to "${name}"`);
     });
 
-    // handle user message
-    client.on('message', message => io.emit('message', new Message(message, currentUser)));
+    // broadcast user message to every one
+    client.on('message', message => {
+        io.emit('message', client.id, users[client.id], now(), message);
+        console.log(`[${client.id}]: "${users[client.id]}" said "${message}"`);
+    });
 
     // handle user disconnection
     client.on('disconnect', () => {
-        users = users.filter(user => user.id !== client.id);
-        broadcastUserlist();
-        currentUser.name && client.broadcast.emit('message', new Message(`<strong>${currentUser.name}</strong> has left`));
+        console.log(`[${client.id}]: disconnected`);
+        if (users[client.id]) {
+            client.broadcast.emit('message', null, 'system', now(), `<strong>${users[client.id]}</strong> has left`);
+            delete users[client.id];
+            io.emit('users', users);
+        }
     });
 });
-
-// serve static public files and start the server
-app.use(express.static(path.join(__dirname, 'public')));
-server.listen(port, host, () => console.info(`chat server is running at ${host}:${port}`));

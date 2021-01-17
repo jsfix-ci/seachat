@@ -50,7 +50,7 @@ body {
     #body {
         display: flex !important;
         flex: 1 0 auto !important; // 占满除header和footer以外的剩余高度
-        height: 0px !important; // 重要!
+        height: 0px !important;
         border-top: 1px solid black;
         border-bottom: 1px solid black;
 
@@ -70,11 +70,6 @@ body {
             .me::after {
                 content: " (me)";
                 color: #ccc;
-            }
-
-            .anonymous {
-                color: #ccc;
-                font-size: 16px;
             }
         }
 
