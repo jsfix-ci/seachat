@@ -21,6 +21,7 @@ const usernames = {}
 server.on('connection', (client) => {
     client.on('username', (username) => {
         // username must be unique and not empty, ask client to rename if it is not.
+        username = username.trim()
         if (!username || username == 'system' || Object.values(usernames).includes(username)) client.emit('rename')
         else {
             // Welcome the new comer and update userlist for all clients

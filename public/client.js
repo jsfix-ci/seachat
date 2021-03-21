@@ -6,7 +6,7 @@ client.on('connect', () => client.emit('username', myUsername))
 
 // Try another nmae if current one is invalid
 client.on('rename', () => {
-    myUsername = !!myUsername ? prompt(`Username "${myUsername}" is taken. Enter another one, please.`) : prompt('Enter your name, please.') || ''
+    myUsername = (!!myUsername ? prompt(`Username "${myUsername}" is taken. Enter another one, please.`) : prompt('Enter your name, please.') || '').trim()
     localStorage.setItem('username', myUsername)
     client.emit('username', myUsername)
 })
