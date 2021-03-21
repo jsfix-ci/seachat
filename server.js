@@ -1,40 +1,48 @@
-const express = require('express');
-const app = express();
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
-const now = () => (new Date()).toLocaleString();
-const users = {};
-app.use(express.static('public'));
-server.listen(8000, 'localhost');
+// Create an ExpressJS application object
+const express = require('express')
+const app = express()
 
-// handle websocket connection and comunication events
-io.on('connection', client => {
-    console.log(`[${client.id}]: connected`);
+// Let ExpressJS servers static files
+app.use(express.static('public'))
 
-    // handle user's name
-    client.on('name', name => {
-        // name should be not empty and unique
-        if (!name || name == 'system' || Object.values(users).includes(name)) return client.emit('rename', name);
-        // say hello to user, set user's name and broadcast the updated users list
-        client.emit('message', null, 'system', now(), 'Welcome to SeaChat ...');
-        users[client.id] = name;
-        io.emit('users', users);
-        console.log(`[${client.id}]: set name to "${name}"`);
-    });
+// Create a http.Server object and start listening
+const httpServer = app.listen(process.env.PORT || 8000, '0.0.0.0')
 
-    // broadcast user message to every one
-    client.on('message', message => {
-        io.emit('message', client.id, users[client.id], now(), message);
-        console.log(`[${client.id}]: "${users[client.id]}" said "${message}"`);
-    });
+// Create WebSocket connection
+const server = require('socket.io')(httpServer)
 
-    // handle user disconnection
-    client.on('disconnect', () => {
-        console.log(`[${client.id}]: disconnected`);
-        if (users[client.id]) {
-            client.broadcast.emit('message', null, 'system', now(), `<strong>${users[client.id]}</strong> has left`);
-            delete users[client.id];
-            io.emit('users', users);
+function Message(username, message) {
+    return { datetime: new Date().toLocaleString('en', { hour12: false }), username, message }
+}
+
+const usernames = {}
+
+// Handle new connections
+server.on('connection', (client) => {
+    client.on('username', (username) => {
+        // username must be unique and not empty, ask client to rename if it is not.
+        if (!username || username == 'system' || Object.values(usernames).includes(username)) client.emit('rename')
+        else {
+            // Welcome the new comer and update userlist for all clients
+            usernames[client.id] = username
+            // Notes:
+            // `server.emit()` ==> send to every clients
+            // `client.emit()` ==> send to this client
+            // `client.broadcast.emit()` ==> send to every clients except this one
+            // see more at https://socket.io/docs/v4/emit-cheatsheet/
+            client.emit('message', Message('system', 'Welcome to join us!'))
+            client.broadcast.emit('message', Message('system', `<strong>${usernames[client.id]}</strong> joined us.`))
+            server.emit('usernames', Object.values(usernames))
+
+            // Broadcast message from client to all clients
+            client.on('message', (message) => server.emit('message', Message(usernames[client.id], message)))
+
+            // Handle disconnection and update userlist for all clients
+            client.on('disconnect', () => {
+                client.broadcast.emit('message', Message('system', `<strong>${usernames[client.id]}</strong> has left.`))
+                delete usernames[client.id]
+                server.emit('usernames', Object.values(usernames))
+            })
         }
-    });
-});
+    })
+})

@@ -1,42 +1,42 @@
-const client = io();  // websocket client object
-const messageInput = document.getElementById('message');
-const usersContainer = document.getElementById('users');
-const messagesContainer = document.getElementById('messages');
+const client = io()
 
-// send your name to server
-client.on('connect', () => client.emit('name', prompt('Please enter your name.')));
-client.on('rename', name => client.emit('name', name ?
-    prompt(`The name "${name}" is taken. Please enter another name.`) :
-    prompt('Please MUST enter your name.')
-));
+// Load my username from localStorage and send it to server
+let myUsername = localStorage.getItem('username') || ''
+client.on('connect', () => client.emit('username', myUsername))
 
-// handle user list from server
-client.on('users', users => {
-    usersContainer.innerHTML = '';
-    for (const [id, name] of Object.entries(users)) {
-        const p = document.createElement('p');
-        p.className = id === client.id ? 'user me' : 'user';
-        p.innerText = name;
-        usersContainer.append(p);
+// Try another nmae if current one is invalid
+client.on('rename', () => {
+    myUsername = !!myUsername ? prompt(`Username "${myUsername}" is taken. Enter another one, please.`) : prompt('Enter your name, please.') || ''
+    localStorage.setItem('username', myUsername)
+    client.emit('username', myUsername)
+})
+
+// Update userlist from server
+client.on('usernames', (usernames) => {
+    usernamesContainer.innerHTML = ''
+    for (const username of usernames) {
+        const p = document.createElement('p')
+        p.className = username == myUsername ? 'user me' : 'user'
+        p.innerText = username
+        usernamesContainer.append(p)
     }
-});
+})
 
-// show message incoming from server
-client.on('message', (id, name, time, message) => {
-    const div = document.createElement('div');
-    id === client.id && (name = 'me');
-    div.className = 'message';
-    div.innerHTML = `<p class='meta'><span class='name'>${name}</span> @ <span class='time'>${time}</span></p>
-    <p class='content'>${message}</p>`;
-    messagesContainer.append(div);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;  // auto scroll down to bottom
-});
+// Show message from server
+client.on('message', ({ datetime, username, message }) => {
+    const div = document.createElement('div')
+    div.className = username === myUsername ? 'message my-message' : 'message'
+    div.innerHTML = `<p class='meta'><span class='name'>@${username}</span> <span class='time'>${datetime}</span></p>
+    <p class='content'>${message}</p>`
+    messagesContainer.append(div)
+    messagesContainer.scrollTop = messagesContainer.scrollHeight // auto scroll down to bottom
+})
 
-// send message to server
-function sendMessage() {
-    const message = messageInput.value.trim();
-    message && client.emit('message', message);
-    messageInput.value = '';
-    messageInput.focus();
-}
-messageInput.addEventListener('keyup', event => event.keyCode === 13 && sendMessage());
+// Send message to server
+messageForm.addEventListener('submit', (event) => {
+    event.preventDefault()
+    const message = messageInput.value.trim()
+    message && client.emit('message', message)
+    messageInput.value = ''
+    messageInput.focus()
+})

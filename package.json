@@ -1,31 +1,30 @@
 {
-  "name": "seachat",
-  "version": "1.0.0",
-  "description": "chat app example using socket.io",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/archtaurus/seachat.git"
-  },
-  "keywords": [
-    "chat",
-    "socket.io"
-  ],
-  "author": "Zhao Xin <7176466@qq.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/archtaurus/seachat/issues"
-  },
-  "homepage": "https://github.com/archtaurus/seachat#readme",
-  "dependencies": {
-    "express": "^4.17.1",
-    "socket.io": "^2.3.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
-  }
+    "name": "seachat",
+    "version": "1.1.0",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "npx nodemon server.js"
+    },
+    "description": "chat app example using socket.io",
+    "keywords": [
+        "socket.io",
+        "chat app",
+        "express",
+        "example"
+    ],
+    "author": "Zhao Xin <7176466@qq.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/archtaurus/seachat.git"
+    },
+    "bugs": {
+        "url": "https://github.com/archtaurus/seachat/issues"
+    },
+    "homepage": "https://github.com/archtaurus/seachat#readme",
+    "dependencies": {
+        "express": "^4.17.1",
+        "socket.io": "^4.0.0"
+    }
 }

@@ -2,25 +2,33 @@
 
 chat app example using socket.io
 
-![screenshot](public/screenshot.png)
+![screenshot](screenshot.png)
 
 ## Run
 
 ``` shell
-npm install
-npm start
+yarn install
+yarn dev
 firefox http://localhost:8000
 ```
 
-## Note
+## Features
 
-At server side:
-
-- `io.emit()` means => send to every client
-- `client.emit()` means => send to the client
-- `client.broadcast.emit()` means => send to every but except this client
+- [X] simple, clear and customizable responsive UI
+- [X] support for username
+- [X] show user connection/disconnection notification
+- [X] list online users
+- [ ] private chatting
+- [ ] chatting channels
+- [ ] show “{user} is typing”
+- [ ] browse chatting history
 
 ## History
+
+- Version 1.1.0
+  - upgrade dependencies
+  - update style.css
+  - android firefox client bug fixed
 
 - Version 1.0.2
   - remove `moment` from dependencies.
@@ -28,9 +36,11 @@ At server side:
   - make code clean and readable
   - rewrite comments
   - anonymous is not allowed
+
 - Version 1.0.1
   - remove `uuid` from dependencies, it's not needed for this app.
   - client = io(); because `client.id` is just the `client.io.id`.
   - minor bug fixed
+
 - Version 1.0.0
   - first release
