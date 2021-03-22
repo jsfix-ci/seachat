@@ -3,6 +3,7 @@
 chat app example using socket.io
 
 [![Build Status](https://travis-ci.com/archtaurus/seachat.svg?branch=master)](https://travis-ci.com/archtaurus/seachat)
+
 [![Dependencies Status](https://status.david-dm.org/gh/archtaurus/seachat.svg)](https://david-dm.org/archtaurus/seachat)
 
 ![screenshot](screenshot.png)
