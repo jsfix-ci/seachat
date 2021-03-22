@@ -1,6 +1,6 @@
 const expect = require('chai').expect
 const io = require('socket.io-client')
-const app = require('../server.js')
+const server = require('../server.js')
 const url = 'http://localhost:8000'
 const options = {
     transports: ['websocket'],
@@ -46,4 +46,9 @@ it('after send username to server should receive username list', (done) => {
         done()
     })
     client.on('connect', () => client.emit('username', username))
+})
+
+it('close the server', (done) => {
+    const a = server.close()
+    done()
 })

@@ -51,4 +51,4 @@ io.on('connection', (client) => {
     })
 })
 
-module.exports = app
+module.exports = server
