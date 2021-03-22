@@ -6,7 +6,9 @@ const app = express()
 app.use(express.static('public'))
 
 // Create a http.Server object and start listening
-const httpServer = app.listen(process.env.PORT || 8000, '0.0.0.0')
+const host = process.env.HOST || '0.0.0.0'
+const port = process.env.PORT || 8000
+const httpServer = app.listen(port, host, () => console.log(`server started at http://${host}:${port}/`))
 
 // Create WebSocket connection
 const server = require('socket.io')(httpServer)
