@@ -6,27 +6,25 @@ const app = express()
 app.use(express.static('public'))
 
 // Create Server and WebSocket object
-const host = process.env.HOST || '0.0.0.0'
-const port = process.env.PORT || 8000
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
-server.listen(port, host, () => console.log(`server started at http://${host}:${port}/`))
 
-function Message(username, message) {
-    return { datetime: new Date().toLocaleString('en', { hour12: false }), username, message }
+// Start listening
+if (process.env.NODE_ENV != 'test') {
+    const host = process.env.HOST || '0.0.0.0'
+    const port = process.env.PORT || 8000
+    server.listen(port, host, console.log(`server started at http://${host}:${port}/`))
 }
 
 const usernames = {}
 
-// Handle new connections
+// Handle new connection
 io.on('connection', (client) => {
-    // Welcome the new comer
-    client.emit('message', Message('system', 'Welcome to join us!'))
-
+    client.emit('welcome') // Welcome the new comer
     client.on('username', (username) => {
-        // username must be unique and not empty, ask client to rename if it is not.
+        // username must be unique and not empty, ask client to rename invalid name.
         username = username.trim()
-        if (!username || username == 'system' || Object.values(usernames).includes(username)) client.emit('rename')
+        if (!username || Object.values(usernames).includes(username)) client.emit('rename')
         else {
             // update userlist for all clients
             usernames[client.id] = username
@@ -35,15 +33,15 @@ io.on('connection', (client) => {
             // `client.emit()` ==> send to this client
             // `client.broadcast.emit()` ==> send to every clients except this one
             // see more at https://socket.io/docs/v4/emit-cheatsheet/
-            client.broadcast.emit('message', Message('system', `<strong>${usernames[client.id]}</strong> joined us.`))
+            client.broadcast.emit('join', username)
             io.emit('usernames', Object.values(usernames))
 
             // Broadcast message from client to all clients
-            client.on('message', (message) => io.emit('message', Message(usernames[client.id], message)))
+            client.on('message', (message) => io.emit('message', { username, message }))
 
             // Handle disconnection and update userlist for all clients
             client.on('disconnect', () => {
-                client.broadcast.emit('message', Message('system', `<strong>${usernames[client.id]}</strong> has left.`))
+                client.broadcast.emit('left', usernames[client.id])
                 delete usernames[client.id]
                 io.emit('usernames', Object.values(usernames))
             })
@@ -51,4 +49,4 @@ io.on('connection', (client) => {
     })
 })
 
-module.exports = server
+module.exports = { server, io }
