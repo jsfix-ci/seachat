@@ -4,6 +4,7 @@ chat app example using socket.io
 
 [![Dependencies Status](https://status.david-dm.org/gh/archtaurus/seachat.svg)](https://david-dm.org/archtaurus/seachat)
 [![Build Status](https://travis-ci.com/archtaurus/seachat.svg?branch=master)](https://travis-ci.com/archtaurus/seachat)
+[![Node.js CI](https://github.com/archtaurus/seachat/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/archtaurus/seachat/actions/workflows/node.js.yml)
 
 ![screenshot](seachat.png)
 
