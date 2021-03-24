@@ -29,6 +29,9 @@ firefox http://localhost:8000
 
 ## History
 
+- Version 1.1.1
+  - add tests
+
 - Version 1.1.0
   - upgrade dependencies
   - update style.css
