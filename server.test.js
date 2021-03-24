@@ -1,6 +1,6 @@
 const clinet_io = require('socket.io-client')
 const axios = require('axios')
-const { server, io } = require('../src/server.js')
+const { server, io } = require('./server.js')
 const host = process.env.HOST || 'localhost'
 const port = process.env.PORT || 8000
 const url = `http://${host}:${port}`
