@@ -7,6 +7,7 @@
         "dev": "nodemon",
         "test": "jest --no-cache --detectOpenHandles --runInBand --forceExit"
     },
+    "bin": "server.js",
     "description": "chat app example using socket.io",
     "keywords": [
         "socket.io",

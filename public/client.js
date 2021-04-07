@@ -1,17 +1,21 @@
+/**
+ * SeaChat Client
+ */
+
 const client = io()
 
-// Load my username from localStorage and send it to server
+// load username from localStorage and send it to server
 let username = localStorage.getItem('username') || ''
 client.on('connect', () => client.emit('username', username))
 
-// Try another nmae if current one is invalid
+// user should be asked to rename himself if his name is taken
 client.on('rename', () => {
     username = (!!username ? prompt(`Username "${username}" is taken. Enter another one, please.`) : prompt('Enter your name, please.') || '').trim()
     localStorage.setItem('username', username)
     client.emit('username', username)
 })
 
-// Update userlist from server
+// receive usernames from server and update the userlist on page
 client.on('usernames', (usernames) => {
     usernamesContainer.innerHTML = ''
     for (const name of usernames) {
@@ -22,7 +26,22 @@ client.on('usernames', (usernames) => {
     }
 })
 
-// Show message from server
+// Show different kinds of message from the server
+client.on('welcome', () => showMessage('system', 'Welcome to join us!'))
+client.on('join', (name) => showMessage('system', `<strong>${name}</strong> joined us.`))
+client.on('left', (name) => showMessage('system', `<strong>${name}</strong> has left.`))
+client.on('message', ({ username, message }) => showMessage(username, message))
+
+// send message from client to server
+messageForm.addEventListener('submit', (event) => {
+    event.preventDefault()
+    const message = messageInput.value.trim()
+    message && client.emit('message', message)
+    messageInput.value = ''
+    messageInput.focus()
+})
+
+// show message from server on to the page
 const showMessage = (sender, message) => {
     const datetime = new Date().toLocaleString('en', { hour12: false })
     const div = document.createElement('div')
@@ -32,17 +51,3 @@ const showMessage = (sender, message) => {
     messagesContainer.append(div)
     messagesContainer.scrollTop = messagesContainer.scrollHeight // auto scroll down to bottom
 }
-
-client.on('welcome', () => showMessage('system', 'Welcome to join us!'))
-client.on('join', (name) => showMessage('system', `<strong>${name}</strong> joined us.`))
-client.on('left', (name) => showMessage('system', `<strong>${name}</strong> has left.`))
-client.on('message', ({ username, message }) => showMessage(username, message))
-
-// Send message to server
-messageForm.addEventListener('submit', (event) => {
-    event.preventDefault()
-    const message = messageInput.value.trim()
-    message && client.emit('message', message)
-    messageInput.value = ''
-    messageInput.focus()
-})

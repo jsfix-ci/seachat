@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // Create an ExpressJS application object
 const express = require('express')
 const app = express()
@@ -13,7 +15,7 @@ const io = require('socket.io')(server)
 if (process.env.NODE_ENV != 'test') {
     const host = process.env.HOST || '0.0.0.0'
     const port = process.env.PORT || 8000
-    server.listen(port, host, console.log(`server started at http://${host}:${port}/`))
+    server.listen(port, host, console.log(`seachat server started at http://${host}:${port}/`))
 }
 
 const usernames = {}
