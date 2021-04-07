@@ -1,13 +1,15 @@
 {
     "name": "seachat",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
         "dev": "nodemon",
         "test": "jest --no-cache --detectOpenHandles --runInBand --forceExit"
     },
-    "bin": "server.js",
+    "bin": {
+        "seachat": "server.js"
+    },
     "description": "chat app example using socket.io",
     "keywords": [
         "socket.io",
