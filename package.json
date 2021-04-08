@@ -1,5 +1,6 @@
 {
     "name": "seachat",
+    "description": "A chat app built on express and socket.io.",
     "version": "0.9.0",
     "main": "server.js",
     "scripts": {
@@ -18,12 +19,10 @@
         "package-lock.json",
         "README.md"
     ],
-    "description": "chat app example using socket.io",
     "keywords": [
         "socket.io",
         "chat app",
-        "express",
-        "example"
+        "express"
     ],
     "author": "Zhao Xin <7176466@qq.com>",
     "license": "MIT",

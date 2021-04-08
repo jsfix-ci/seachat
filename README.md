@@ -1,6 +1,6 @@
 # SeaChat
 
-chat app example built on express and socket.io
+A chat app built on express and socket.io.
 
 [![Test and Publish](https://github.com/archtaurus/seachat/actions/workflows/publish.yml/badge.svg)](https://github.com/archtaurusseachat/actions/workflows/publish.yml)
 [![npm](https://img.shields.io/npm/v/seachat)](https://www.npmjs.com/package/seachat)
