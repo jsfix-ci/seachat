@@ -65,7 +65,7 @@ describe('test chatting', () => {
     test(`client1 heards client2 says "${message}"`, (done) => {
         client2.emit('message', message)
         client1.on('message', ({ username, message }) => {
-            expect(username).toBe(clinet2Username)
+            expect(username).toEqual(clinet2Username)
             expect(message).toBe(message)
             done()
         })
