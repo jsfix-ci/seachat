@@ -1,5 +1,5 @@
 /**
- * SeaChat Client
+ * Client for SeaChat
  */
 
 const client = io()
