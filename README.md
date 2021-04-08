@@ -2,17 +2,12 @@
 
 chat app example built on express and socket.io
 
-
-[![Build and Publish](https://github.com/archtaurus/p5js-cli/actions/workflows/publish.yml/badge.svg)](https://github.com/archtaurus/p5js-cli/actions/workflows/publish.yml)
-[![npm](https://img.shields.io/npm/v/p5js)](https://www.npmjs.com/package/p5js)
-[![GitHub](https://img.shields.io/github/license/archtaurus/p5js-cli)](https://github.com/archtaurus/p5js-cli/blob/master/LICENSE)
-[![Dependencies Status](https://status.david-dm.org/gh/archtaurus/p5js-cli.svg)](https://www.npmjs.com/package/p5js?activeTab=dependencies)
-[![Last Commit](https://img.shields.io/github/last-commit/archtaurus/p5js-cli)](https://github.com/archtaurus/p5js-cli)
-[![Download Total](https://img.shields.io/npm/dt/p5js)](https://www.npmjs.com/package/p5js)
-
-[![Dependencies Status](https://status.david-dm.org/gh/archtaurus/seachat.svg)](https://david-dm.org/archtaurus/seachat)
-[![Build Status](https://travis-ci.com/archtaurus/seachat.svg?branch=master)](https://travis-ci.com/archtaurus/seachat)
-[![Node.js CI](https://github.com/archtaurus/seachat/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/archtaurus/seachat/actions/workflows/node.js.yml)
+[![Test and Publish](https://github.com/archtaurus/seachat/actions/workflows/publish.yml/badge.svg)](https://github.com/archtaurusseachat/actions/workflows/publish.yml)
+[![npm](https://img.shields.io/npm/v/seachat)](https://www.npmjs.com/package/seachat)
+[![GitHub](https://img.shields.io/github/license/archtaurus/seachat)](https://github.com/archtaurus/seachat/blob/master/LICENSE)
+[![Dependencies Status](https://status.david-dm.org/gh/archtaurus/seachat.svg)](https://www.npmjs.com/package/p5js?activeTab=dependencies)
+[![Last Commit](https://img.shields.io/github/last-commit/archtaurus/seachat)](https://github.com/archtaurus/seachat)
+[![Download Total](https://img.shields.io/npm/dt/seachat)](https://www.npmjs.com/package/seachat)
 
 ![screenshot](seachat.png)
 
@@ -27,17 +22,7 @@ npm i -g seachat
 ✨ Start the server
 
 ``` shell
-seachat -p
-firefox http://localhost:8000
+seachat [-h 0.0.0.0] [-p 8000]
 ```
 
-## Features
-
-- [X] simple, clear and customizable responsive UI
-- [X] support for username
-- [X] show user connection/disconnection notification
-- [X] list online users
-- [ ] private chatting
-- [ ] chatting channels
-- [ ] show “{user} is typing”
-- [ ] browse chatting history
+❤️ Visit the server at defaults to `http://localhost:8000` to chat.
