@@ -1,7 +1,7 @@
 {
     "name": "seachat",
     "description": "A chat app built on express and socket.io.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "server.js",
     "scripts": {
         "start": "node main.js",
@@ -9,7 +9,7 @@
         "test": "jest --no-cache --detectOpenHandles --runInBand --forceExit"
     },
     "bin": {
-        "seachat": "./main.js"
+        "seachat": "main.js"
     },
     "files": [
         "public/",
