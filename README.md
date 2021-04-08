@@ -2,17 +2,32 @@
 
 chat app example built on express and socket.io
 
+
+[![Build and Publish](https://github.com/archtaurus/p5js-cli/actions/workflows/publish.yml/badge.svg)](https://github.com/archtaurus/p5js-cli/actions/workflows/publish.yml)
+[![npm](https://img.shields.io/npm/v/p5js)](https://www.npmjs.com/package/p5js)
+[![GitHub](https://img.shields.io/github/license/archtaurus/p5js-cli)](https://github.com/archtaurus/p5js-cli/blob/master/LICENSE)
+[![Dependencies Status](https://status.david-dm.org/gh/archtaurus/p5js-cli.svg)](https://www.npmjs.com/package/p5js?activeTab=dependencies)
+[![Last Commit](https://img.shields.io/github/last-commit/archtaurus/p5js-cli)](https://github.com/archtaurus/p5js-cli)
+[![Download Total](https://img.shields.io/npm/dt/p5js)](https://www.npmjs.com/package/p5js)
+
 [![Dependencies Status](https://status.david-dm.org/gh/archtaurus/seachat.svg)](https://david-dm.org/archtaurus/seachat)
 [![Build Status](https://travis-ci.com/archtaurus/seachat.svg?branch=master)](https://travis-ci.com/archtaurus/seachat)
 [![Node.js CI](https://github.com/archtaurus/seachat/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/archtaurus/seachat/actions/workflows/node.js.yml)
 
 ![screenshot](seachat.png)
 
-## Run
+## 🐙 Install
 
 ``` shell
-yarn install
-yarn dev
+npm i -g seachat
+```
+
+## 💡 Usage
+
+✨ Start the server
+
+``` shell
+seachat -p
 firefox http://localhost:8000
 ```
 
@@ -26,28 +41,3 @@ firefox http://localhost:8000
 - [ ] chatting channels
 - [ ] show “{user} is typing”
 - [ ] browse chatting history
-
-## History
-
-- Version 1.1.1
-  - add tests
-
-- Version 1.1.0
-  - upgrade dependencies
-  - update style.css
-  - android firefox client bug fixed
-
-- Version 1.0.2
-  - remove `moment` from dependencies.
-  - add server side logging
-  - make code clean and readable
-  - rewrite comments
-  - anonymous is not allowed
-
-- Version 1.0.1
-  - remove `uuid` from dependencies, it's not needed for this app.
-  - client = io(); because `client.id` is just the `client.io.id`.
-  - minor bug fixed
-
-- Version 1.0.0
-  - first release
