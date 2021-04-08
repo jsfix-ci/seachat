@@ -1,32 +1,28 @@
-#!/usr/bin/env node
-
 // Create an ExpressJS application object
+// and let it servers static files
 const express = require('express')
 const app = express()
-
-// Let ExpressJS servers static files
 app.use(express.static('public'))
 
-// Create Server and WebSocket object
+// Create HTTP Server and SocketIO object
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
-
-// Start listening
-if (process.env.NODE_ENV != 'test') {
-    const host = process.env.HOST || '0.0.0.0'
-    const port = process.env.PORT || 8000
-    server.listen(port, host, console.log(`seachat server started at http://${host}:${port}/`))
-}
 
 const usernames = {}
 
 // Handle new connection
 io.on('connection', (client) => {
-    client.emit('welcome') // Welcome the new comer
+
+    // Welcome the new comer
+    client.emit('welcome')
+
     client.on('username', (username) => {
-        // username must be unique and not empty, ask client to rename invalid name.
         username = username.trim()
+
+        // username must be unique and not empty, ask client to rename invalid name.
         if (!username || Object.values(usernames).includes(username)) client.emit('rename')
+
+        // save username and serve this user
         else {
             // update userlist for all clients
             usernames[client.id] = username
