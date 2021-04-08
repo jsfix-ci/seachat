@@ -14,10 +14,7 @@
     "files": [
         "public/",
         "main.js",
-        "server.js",
-        "package.json",
-        "package-lock.json",
-        "README.md"
+        "server.js"
     ],
     "keywords": [
         "socket.io",
